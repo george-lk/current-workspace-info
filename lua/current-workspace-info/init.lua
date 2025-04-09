@@ -4,13 +4,21 @@ local ret_func = {}
 function ret_func.show_current_scope()
     local screen_percentage = 0.70
     local width = math.floor(vim.o.columns * screen_percentage)
-    local height = 4
+    local height = 10
     local col = math.floor((vim.o.columns - width) / 2)
     local row = math.floor(((vim.o.lines - height) / 2) - 1)
 
     local user_current_window = vim.fn.win_getid()
     local current_buffer_filename = vim.api.nvim_buf_get_name(0)
     local current_working_dir = vim.fn.getcwd()
+    local current_git_remote_url = vim.fn.system('git config --get remote.origin.url')
+
+    if current_git_remote_url == "" then
+        current_git_remote_url = ""
+    else
+        current_git_remote_url = current_git_remote_url:gsub("%s+$", "")
+    end
+
     local window_buffer = vim.api.nvim_create_buf(false,true)
     local is_enter_window = true
 
@@ -26,7 +34,7 @@ function ret_func.show_current_scope()
         border = 'single',
     }
 
-    local disp_buf = {'===== Current Filepath =====', current_buffer_filename, '===== Current CWD =====', current_working_dir}
+    local disp_buf = {'===== Current Filepath =====', current_buffer_filename, '', '===== Current CWD =====', current_working_dir, '', '===== Current Git remote Url =====', current_git_remote_url}
 
     vim.api.nvim_buf_set_lines(window_buffer,0,-1,false,disp_buf)
     winnr = vim.api.nvim_open_win(
