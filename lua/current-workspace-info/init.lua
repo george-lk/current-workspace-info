@@ -43,6 +43,15 @@ function ret_func.show_current_scope()
         win_opt
     )
 
+    -- Add highlight color
+    vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_file_path", {fg = "#3399FF"})
+    vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_cwd", {fg = "#D14904"})
+    vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_git_remote_origin_url", {fg = "#99FF33"})
+
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_file_path", 1, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_cwd", 4, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_git_remote_origin_url", 7, 0, -1)
+
     local close_cmd_window = '<Cmd>lua vim.api.nvim_set_current_win(' .. user_current_window .. '); <CR>'
     vim.api.nvim_buf_set_keymap(window_buffer,'n','<Esc>',close_cmd_window, {noremap=true, silent=true})
     local au_workspace_info_id = vim.api.nvim_create_augroup("au_workspace_info", {clear = true})
