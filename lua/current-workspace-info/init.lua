@@ -53,7 +53,7 @@ function ret_func.show_current_scope()
 
     -- Add highlight color
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_file_path", {fg = "#3399FF"})
-    vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_cwd", {fg = "#D14904"})
+    vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_cwd", {fg = "#ff4f95"})
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_git_remote_origin_url", {fg = "#99FF33"})
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_git_branch", {fg = "#f59842"})
 
