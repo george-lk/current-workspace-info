@@ -1,6 +1,11 @@
 local ret_func = {}
 
 
+local function escape_pattern(string_val)
+    return string_val:gsub("([^%w])", "%%%1")
+end
+
+
 function ret_func.show_current_scope()
     local screen_percentage = 0.70
     local width = math.floor(vim.o.columns * screen_percentage)
@@ -26,6 +31,12 @@ function ret_func.show_current_scope()
         current_git_branch = current_git_branch:gsub("%s+$", "")
     end
 
+    -- Normalize path seperation between OS
+    current_buffer_filename = current_buffer_filename:gsub("\\", "/")
+    current_working_dir = current_working_dir:gsub("\\", "/")
+
+    local escaped_current_working_dir = escape_pattern(current_working_dir)
+    local relative_file_path = current_buffer_filename:gsub("^" .. escaped_current_working_dir .. "/", "")
 
     local window_buffer = vim.api.nvim_create_buf(false,true)
     local is_enter_window = true
@@ -42,7 +53,7 @@ function ret_func.show_current_scope()
         border = 'single',
     }
 
-    local disp_buf = {'===== Current Filepath =====', current_buffer_filename, '', '===== Current CWD =====', current_working_dir, '', '===== Current Git remote Url =====', current_git_remote_url, '', '===== Current git branch =====', current_git_branch}
+    local disp_buf = {'===== Relative File Path =====', relative_file_path, '', '===== Current CWD =====', current_working_dir, '', '===== Full file Path =====', current_buffer_filename, '', '===== Current Git remote Url =====', current_git_remote_url, '', '===== Current git branch =====', current_git_branch}
 
     vim.api.nvim_buf_set_lines(window_buffer,0,-1,false,disp_buf)
     winnr = vim.api.nvim_open_win(
@@ -52,15 +63,17 @@ function ret_func.show_current_scope()
     )
 
     -- Add highlight color
-    vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_file_path", {fg = "#3399FF"})
+    vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_relative_file_path", {fg = "#f45eff"})
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_cwd", {fg = "#ff4f95"})
+    vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_full_file_path", {fg = "#3399FF"})
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_git_remote_origin_url", {fg = "#99FF33"})
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_git_branch", {fg = "#f59842"})
 
-    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_file_path", 1, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_relative_file_path", 1, 0, -1)
     vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_cwd", 4, 0, -1)
-    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_git_remote_origin_url", 7, 0, -1)
-    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_git_branch",10, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_full_file_path", 7, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_git_remote_origin_url", 10, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_git_branch",13, 0, -1)
 
     local close_cmd_window = '<Cmd>lua vim.api.nvim_set_current_win(' .. user_current_window .. '); <CR>'
     vim.api.nvim_buf_set_keymap(window_buffer,'n','<Esc>',close_cmd_window, {noremap=true, silent=true})
