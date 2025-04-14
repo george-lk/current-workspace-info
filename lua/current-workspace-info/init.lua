@@ -62,18 +62,29 @@ function ret_func.show_current_scope()
         win_opt
     )
 
-    -- Add highlight color
+    -- Define highlight color for each information
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_relative_file_path", {fg = "#f45eff"})
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_cwd", {fg = "#ff4f95"})
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_full_file_path", {fg = "#3399FF"})
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_git_remote_origin_url", {fg = "#99FF33"})
     vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_git_branch", {fg = "#f59842"})
 
+    -- Add highlight color for each information
     vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_relative_file_path", 1, 0, -1)
     vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_cwd", 4, 0, -1)
     vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_full_file_path", 7, 0, -1)
     vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_git_remote_origin_url", 10, 0, -1)
     vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_git_branch",13, 0, -1)
+
+    -- Define highlight color for infomration title
+    vim.api.nvim_set_hl(0, "custom_current_workspace_info_highlight_info_title", {fg = "#c4c4c4"})
+
+    -- Add highlight color for infomration title
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_info_title",0, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_info_title",3, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_info_title",6, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_info_title",9, 0, -1)
+    vim.api.nvim_buf_add_highlight(window_buffer, 0, "custom_current_workspace_info_highlight_info_title",12, 0, -1)
 
     local close_cmd_window = '<Cmd>lua vim.api.nvim_set_current_win(' .. user_current_window .. '); <CR>'
     vim.api.nvim_buf_set_keymap(window_buffer,'n','<Esc>',close_cmd_window, {noremap=true, silent=true})
