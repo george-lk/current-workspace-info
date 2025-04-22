@@ -25,7 +25,7 @@ function ret_func.show_current_scope()
         current_git_remote_url = current_git_remote_url:gsub("%s+$", "")
     end
 
-    if current_git_branch == "" then
+    if current_git_branch:find('fatal: not a git repository') then
         current_git_branch = ""
     else
         current_git_branch = current_git_branch:gsub("%s+$", "")
